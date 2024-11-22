@@ -41,7 +41,7 @@ public static class Result
     }
     public static ObjectResult ToActionResult<T>(this Result<T> result)
     {
-        return new ObjectResult(result.IsSuccess ? result.Data : result.Errors)
+        return new ObjectResult(result)
         {
             StatusCode = result.StatusCode,
         };

@@ -14,11 +14,13 @@ public class CreateClubCommandHandler : IRequestHandler<CreateClubCommand, Resul
 {
     private readonly GameDbContext _dbContext;
     private readonly IValidator<CreateClubRequest> _validator;
+    private readonly ILogger<CreateClubCommandHandler> _logger;
 
-    public CreateClubCommandHandler(GameDbContext dbContext, IValidator<CreateClubRequest> validator)
+    public CreateClubCommandHandler(GameDbContext dbContext, IValidator<CreateClubRequest> validator, ILogger<CreateClubCommandHandler> logger)
     {
         _dbContext = dbContext;
         _validator = validator;
+        _logger = logger;
     }
 
     public async Task<Result<CreateClubResponse>> Handle(CreateClubCommand request, CancellationToken cancellationToken)
@@ -46,6 +48,7 @@ public class CreateClubCommandHandler : IRequestHandler<CreateClubCommand, Resul
             catch (Exception ex)
             {
                 transaction.Rollback();
+                _logger.LogError(ex, "Exception: {Message}", ex.Message);
                 return Result.Fail<CreateClubResponse>(["Error creating club."]);
             }
         }
