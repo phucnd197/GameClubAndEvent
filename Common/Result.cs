@@ -30,6 +30,15 @@ public static class Result
             IsSuccess = false,
         };
     }
+    public static Result<T1> Fail<T1>(string error, int statusCode = 500)
+    {
+        return new Result<T1>
+        {
+            Errors = [error],
+            StatusCode = statusCode,
+            IsSuccess = false,
+        };
+    }
     public static ObjectResult ToActionResult<T>(this Result<T> result)
     {
         return new ObjectResult(result.IsSuccess ? result.Data : result.Errors)

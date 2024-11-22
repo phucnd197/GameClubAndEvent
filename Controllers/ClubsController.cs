@@ -1,6 +1,8 @@
 ﻿using GameClubAndEvent.Api.Common;
 using GameClubAndEvent.Api.Contracts.Request;
+using GameClubAndEvent.Api.Features;
 using GameClubAndEvent.Api.Features.CreateClub;
+using GameClubAndEvent.Api.Features.CreateEvent;
 using GameClubAndEvent.Api.Features.GetAllClubs;
 using GameClubAndEvent.Api.Features.SearchClubs;
 using MediatR;
@@ -35,4 +37,17 @@ public class ClubsController
         return result.ToActionResult();
     }
 
+    [HttpPost("{clubId:guid}/events")]
+    public async Task<IActionResult> CreateClubEvent(Guid clubId, CreateEventRequest eventRequest, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(new CreateEventCommand(clubId, eventRequest), cancellationToken);
+        return result.ToActionResult();
+    }
+
+    [HttpGet("{clubId:guid}/events")]
+    public async Task<IActionResult> GetClubEvents(Guid clubId, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(new GetClubEventsQuery(clubId), cancellationToken);
+        return result.ToActionResult();
+    }
 }
