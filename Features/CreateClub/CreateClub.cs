@@ -33,7 +33,7 @@ public class CreateClubCommandHandler : IRequestHandler<CreateClubCommand, Resul
 
         if (await _dbContext.Clubs.AnyAsync(x => x.Name == request.CreateClubData.Name, cancellationToken))
         {
-            return Result.Fail<CreateClubResponse>(["Game club already existed."], 400);
+            return Result.Fail<CreateClubResponse>(["Game club already existed."], 409);
         }
 
         var newClub = request.CreateClubData.ToClubEntity();
